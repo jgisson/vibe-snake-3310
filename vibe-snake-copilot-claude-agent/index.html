@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake - Nokia 3310</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'VT323', monospace;
+            user-select: none;
+            overflow: hidden;
+            gap: 20px;
+            padding: 20px 0;
+        }
+
+        .page-title {
+            font-size: clamp(24px, 4vw, 48px);
+            color: #8b9f6e;
+            text-align: center;
+            text-shadow:
+                0 0 10px rgba(139, 159, 110, 0.5),
+                0 0 20px rgba(139, 159, 110, 0.3),
+                2px 2px 0 rgba(0, 0, 0, 0.3);
+            letter-spacing: 2px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow:
+                    0 0 10px rgba(139, 159, 110, 0.5),
+                    0 0 20px rgba(139, 159, 110, 0.3),
+                    2px 2px 0 rgba(0, 0, 0, 0.3);
+            }
+            to {
+                text-shadow:
+                    0 0 20px rgba(139, 159, 110, 0.8),
+                    0 0 30px rgba(139, 159, 110, 0.5),
+                    0 0 40px rgba(139, 159, 110, 0.3),
+                    2px 2px 0 rgba(0, 0, 0, 0.3);
+            }
+        }
+
+        .phone {
+            position: relative;
+        }
+
+        .phone-bg {
+            display: block;
+            height: 90vh;
+            max-height: 850px;
+            width: auto;
+        }
+
+        /* Game screen positioned over the Nokia LCD */
+        .screen-area {
+            position: absolute;
+            top: 25.5%;
+            left: 15.5%;
+            width: 70%;
+            height: 22%;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .screen {
+            width: 100%;
+            height: 100%;
+            background: #8b9f6e;
+            display: flex;
+            flex-direction: column;
+            border-radius: 4px;
+        }
+
+        .screen-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1px 4px;
+            font-size: clamp(8px, 1.2vh, 14px);
+            color: #2d3319;
+            flex-shrink: 0;
+        }
+
+        .canvas-wrapper {
+            position: relative;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: #8b9f6e;
+            border-radius: 4px;
+        }
+
+        canvas {
+            display: block;
+            max-width: 100%;
+            max-height: 100%;
+            background: #8b9f6e;
+            image-rendering: pixelated;
+        }
+
+        /* Transparent touch controls over the phone's d-pad */
+        .touch-dpad {
+            position: absolute;
+            top: 45%;
+            left: 24%;
+            width: 52%;
+            height: 15%;
+        }
+
+        .touch-btn {
+            position: absolute;
+            cursor: pointer;
+            opacity: 0;
+            z-index: 20;
+        }
+
+        .touch-up    { top: 0;   left: 25%; width: 50%; height: 33%; }
+        .touch-down  { bottom: 0; left: 25%; width: 50%; height: 33%; }
+        .touch-left  { top: 20%; left: 0;   width: 30%; height: 60%; }
+        .touch-right { top: 20%; right: 0;  width: 30%; height: 60%; }
+
+        /* Soft key touch areas */
+        .touch-softkey {
+            position: absolute;
+            cursor: pointer;
+            opacity: 0;
+            z-index: 20;
+        }
+
+        .touch-start-key {
+            top: 41.5%;
+            left: 18%;
+            width: 22%;
+            height: 4%;
+        }
+
+        .touch-pause-key {
+            top: 41.5%;
+            right: 18%;
+            width: 22%;
+            height: 4%;
+        }
+
+        /* Overlays */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(139, 159, 110, 0.92);
+            z-index: 10;
+        }
+
+        .overlay-title {
+            font-size: clamp(14px, 2.5vh, 28px);
+            color: #2d3319;
+            margin-bottom: 4px;
+        }
+
+        .overlay-sub {
+            font-size: clamp(10px, 1.5vh, 16px);
+            color: #3d4a2a;
+        }
+
+        .overlay-score {
+            font-size: clamp(12px, 2vh, 20px);
+            color: #2d3319;
+            margin-bottom: 2px;
+        }
+
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<h1 class="page-title">Vibe Snake 3310 - Copilot Claude agent edition</h1>
+
+<div class="phone">
+    <img src="Nokia_3310.png" class="phone-bg" alt="Nokia 3310" />
+
+    <div class="screen-area">
+        <div class="screen">
+            <div class="screen-header">
+                <span>Score: <span id="score">0</span></span>
+                <span>Hi: <span id="hiscore">0</span></span>
+            </div>
+            <div class="canvas-wrapper">
+                <canvas id="game" width="264" height="200"></canvas>
+                <div id="start-overlay" class="overlay">
+                    <div class="overlay-title">SNAKE</div>
+                    <div class="overlay-sub">Press START or Enter</div>
+                </div>
+                <div id="gameover-overlay" class="overlay hidden">
+                    <div class="overlay-title">GAME OVER</div>
+                    <div class="overlay-score" id="final-score"></div>
+                    <div class="overlay-sub">Press START or Enter</div>
+                </div>
+                <div id="pause-overlay" class="overlay hidden">
+                    <div class="overlay-title">PAUSED</div>
+                    <div class="overlay-sub">Press PAUSE to resume</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transparent touch controls over the phone's d-pad -->
+    <div class="touch-dpad">
+        <div class="touch-btn touch-up" id="btn-up"></div>
+        <div class="touch-btn touch-down" id="btn-down"></div>
+        <div class="touch-btn touch-left" id="btn-left"></div>
+        <div class="touch-btn touch-right" id="btn-right"></div>
+    </div>
+
+    <!-- Soft key overlays for start/pause -->
+    <div class="touch-softkey touch-start-key" id="btn-start"></div>
+    <div class="touch-softkey touch-pause-key" id="btn-pause"></div>
+</div>
+
+<script src="game.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Nokia 3310</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="phone-container">
+        <img src="Nokia_3310.png" alt="Nokia 3310" class="phone-bg">
+        
+        <!-- Screen Area -->
+        <div class="screen-area">
+            <div class="header-bar">
+                <span>Signal</span>
+                <span>Battery</span>
+            </div>
+            <canvas id="game-board" width="240" height="160"></canvas>
+            <div class="score-display">Score: <span id="score">0</span></div>
+        </div>
+
+        <!-- Invisible Control Buttons Overlay -->
+        <div class="controls-overlay">
+            <button class="btn-action" id="btn-action" aria-label="Menu"></button>
+            
+            <div class="d-pad-overlay">
+                <button class="btn-arrow up" id="btn-up" aria-label="Up"></button>
+                <div class="d-pad-middle">
+                    <button class="btn-arrow left" id="btn-left" aria-label="Left"></button>
+                    <button class="btn-arrow right" id="btn-right" aria-label="Right"></button>
+                </div>
+                <button class="btn-arrow down" id="btn-down" aria-label="Down"></button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -28,6 +28,7 @@ Use this step by step guide to create the the version of the game:
 2. Extract logic to `game.js` if you want clearer separation for tests or agent edits.
 3. Add the Nokia 3310 photo as a background and ask to place the game canvas in the screen area.
 4. Use `localStorage` for persistent high score and keep the game easy to iterate on.
+5. Add a beautiful title at the top of the page "Vibe Snake 3310 - XXX Edition"
 
 **Development notes**
 - Keep the game tiny and framework-free; vanilla JS + `<canvas>` is preferred.
