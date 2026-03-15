@@ -1,13 +1,12 @@
 # Vibe Snake 3310
 
-A compact, single-file Snake game styled like a Nokia 3310. This repository contains the playable game implemented with HTML, CSS and JavaScript and small test/example folders used for experimenting with different IDEs, agents, or models.
+A collection of simple Snake games styled like a Nokia 3310. This repository contains playable games implemented with HTML, CSS, and JavaScript, used for experimenting with different Vibe coding tools, IDEs, or models.
 
-**Project**: Vibe Snake 3310 — a tiny, nostalgic Snake implementation designed for quick iteration and agent-driven experiments.
+The main objectives of this project are:
+- Test Vibe Coding Tools, Agents, IDEs, and models (with the same instructions)
+- Create a fun Snake game in the style of the Nokia 3310
 
-**What this repo contains:**
-- **`index.html`**: Single-file game (HTML, CSS, JS). The main playable build.
-- **`game.js`**: Optional separated game logic (if present), helper for iterative development.
-- **Other folders**: Each folder represents a test or experiment for a new IDE/Agent/model — use them to try integrations or automated edits.
+Each folder represents a test or experiment for a new IDE/Agent/model — use them to try integrations or automated edits.
 
 **Quick Start**
 
@@ -18,21 +17,33 @@ git clone https://github.com/jgisson/vibe-snake-3310.git
 cd vibe-snake-3310
 ```
 
-2. Open `index.html`  in your browser to play the game.
+2. Navigate to one of the experiment folders (e.g., `vibe-snake-cursor-gemini3_pro`) and open its `index.html` file in your browser to play.
+
 
 **Project creation**
 
-Use this step by step guide to create the the version of the game:
+Use this step-by-step instructions guide to create a version of the game in a empty folder, and open only this folder in your IDE/Agent/model to test it:
 
-1. Start with a single-file `index.html` that contains the UI, styles, and game loop.
-2. Extract logic to `game.js` if you want clearer separation for tests or agent edits.
-3. Add the Nokia 3310 photo as a background and ask to place the game canvas in the screen area.
-4. Use `localStorage` for persistent high score and keep the game easy to iterate on.
-5. Add a beautiful title at the top of the page "Vibe Snake 3310 - XXX Edition"
+* Step 1
+```
+Create a single-file index.html for simple Snake games styled like a Nokia 3310 that contains the UI, styles, and game logic.
+Keep the game tiny and framework-free; vanilla JavaScript with a `<canvas>` is preferred. 
+Add a title at the top of the page: "Vibe Snake 3310 - XXX Edition" where XXX is the name of the IDE/Agent/model being tested.
+Use localStorage for persistent high scores and keep the game easy to iterate on.
+```
 
-**Development notes**
-- Keep the game tiny and framework-free; vanilla JS + `<canvas>` is preferred.
-- Persist high score under the `snake_hiscore` key in `localStorage`.
+* Step 2
+```Extract logic to game.js and styles to style.css for clearer separation of concerns and easier maintenance.```
+
+* Step 3
+Manually add the [Nokia 3310 reference image](./Nokia_3310-reference.png) in the folder 
+```
+Replace your background with a Nokia 3310 image and place the game canvas within the phone screen area.
+```
+
+**List of experiments**
+- [vibe-snake-cursor-gemini3_pro](vibe-snake-cursor-gemini3_pro/)
+- [vibe-snake-copilot-claude-agent](vibe-snake-copilot-claude-agent/)
 
 **Contributing / Experiments**
 - If you add a new agent/IDE test folder, include a README inside the folder explaining the experiment and any commands to reproduce it.
