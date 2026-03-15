@@ -38,7 +38,7 @@ Use localStorage for persistent high scores and keep the game easy to iterate on
 * Step 3
 Manually add the [Nokia 3310 reference image](./Nokia_3310-reference.png) in the folder 
 ```
-Replace your background with a Nokia 3310 image and place the game canvas within the phone screen area.
+I added a photo of a real Nokia 3310 in the current folder. Replace your background by this photo place the game canvas within the phone screen area.
 ```
 
 **List of experiments**

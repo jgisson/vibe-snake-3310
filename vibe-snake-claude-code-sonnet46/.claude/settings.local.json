@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xargs ls:*)",
+      "Bash(python3 -c \"from PIL import Image; img = Image.open\\(''Nokia_3310.png''\\); print\\(img.size\\)\")",
+      "Bash(python3 -c \"import struct,zlib; d=open\\(''Nokia_3310.png'',''rb''\\).read\\(\\); print\\(''W:'', struct.unpack\\(''>I'',d[16:20]\\)[0], ''H:'', struct.unpack\\(''>I'',d[20:24]\\)[0]\\)\")"
+    ]
+  }
+}

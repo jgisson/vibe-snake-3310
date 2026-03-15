@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vibe Snake 3310 - Claude Code + Sonnet 4.6 Edition</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>Vibe Snake 3310 &mdash; Claude Code + Sonnet 4.6 Edition</h1>
+
+<div class="phone">
+  <!-- Real Nokia 3310 photo as the phone shell -->
+  <img src="Nokia_3310.png" class="phone-img" alt="Nokia 3310">
+
+  <!-- Game screen — absolutely positioned over the LCD area in the photo -->
+  <div class="screen-area">
+    <div class="hud">
+      <span id="score-display">SCR: 0</span>
+      <span id="speed-display">LVL: 1</span>
+      <span id="hi-display">HI: 0</span>
+    </div>
+    <canvas id="game" width="220" height="140"></canvas>
+
+    <div class="overlay" id="overlay">
+      <div class="overlay-title" id="overlay-title">SNAKE</div>
+      <div class="overlay-sub"   id="overlay-sub">Press OK to start</div>
+      <div class="overlay-score" id="overlay-score"></div>
+    </div>
+  </div>
+
+  <!-- D-pad — absolutely positioned over the Nokia navigation button -->
+  <div class="dpad-overlay">
+    <div class="dpad">
+      <div class="dpad-empty"></div>
+      <button class="dpad-btn" id="btn-up"    aria-label="Up">&#9650;</button>
+      <div class="dpad-empty"></div>
+      <button class="dpad-btn" id="btn-left"  aria-label="Left">&#9664;</button>
+      <button class="dpad-btn center" id="btn-ok">OK</button>
+      <button class="dpad-btn" id="btn-right" aria-label="Right">&#9654;</button>
+      <div class="dpad-empty"></div>
+      <button class="dpad-btn" id="btn-down"  aria-label="Down">&#9660;</button>
+      <div class="dpad-empty"></div>
+    </div>
+    <div class="action-btns">
+      <button class="action-btn" id="btn-pause" title="Pause">&#9646;&#9646;</button>
+      <button class="action-btn" id="btn-reset" title="Reset">&#8635;</button>
+    </div>
+  </div>
+</div>
+
+<script src="game.js"></script>
+</body>
+</html>
