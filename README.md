@@ -42,8 +42,9 @@ I added a photo of a real Nokia 3310 in the current folder. Replace your backgro
 ```
 
 **List of experiments**
-- [vibe-snake-cursor-gemini3_pro](vibe-snake-cursor-gemini3_pro/)
-- [vibe-snake-copilot-claude-agent](vibe-snake-copilot-claude-agent/)
+- [Vibe Snake - Cursor + Gemini 3 Pro Edition](vibe-snake-cursor-gemini3_pro/)
+- [Vibe Snake - Copilot Claude Agent + Opus 4.6 Edition](vibe-snake-copilot-claude-agent/)
+- [Vibe Snake - Claude Code + Sonnet 4.6 Edition](vibe-snake-claude-code-sonnet46/)
 
 **Contributing / Experiments**
 - If you add a new agent/IDE test folder, include a README inside the folder explaining the experiment and any commands to reproduce it.
