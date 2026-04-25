@@ -1,0 +1,89 @@
+/* Nokia 3310 inspired styling */
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #000;
+    font-family: 'Courier New', Courier, monospace;
+    color: #333;
+    user-select: none;
+    /* Background image setup */
+    background-image: url('nokia-3310.jpg'); /* Assuming the image is named nokia-3310.jpg */
+    background-size: cover;
+    background-attachment: fixed; /* Keeps the background fixed when scrolling */
+    background-position: center;
+}
+
+/* The phone mockup container */
+#game-container {
+    background-color: rgba(204, 204, 204, 0.9); /* Semi-transparent grey plastic look */
+    border: 10px solid #333;
+    border-radius: 25px; /* More rounded for a phone look */
+    padding: 20px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.7); /* Deeper shadow for depth */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%; /* Make it responsive */
+    max-width: 350px; /* Constrain width to phone size */
+    /* This container now represents the visible screen area */
+}
+
+h1 {
+    font-size: 1.4em;
+    margin-bottom: 15px;
+    text-align: center;
+    color: #000;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+#score-board {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 300px;
+    margin-bottom: 15px;
+    padding: 8px 0;
+    border-bottom: 1px solid #333;
+    font-size: 1em;
+    color: #000;
+}
+
+#gameCanvas {
+    background-color: #e0e0e0; /* Screen background */
+    border: 2px solid #333;
+    display: block;
+    image-rendering: pixelated;
+    /* Ensure the canvas fits nicely within the phone screen area */
+    width: 100%; 
+    max-width: 300px;
+    height: auto; /* Let height adjust based on width/aspect ratio */
+}
+
+#controls {
+    margin-top: 20px;
+    display: flex;
+    gap: 15px;
+}
+
+button {
+    background-color: #c0c0c0;
+    border: 3px solid #333;
+    padding: 10px 20px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.1s;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #d0d0d0;
+}
+
+button:active {
+    background-color: #b0b0b0;
+}
