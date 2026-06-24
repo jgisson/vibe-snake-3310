@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibe Snake 3310 - Mistral Vibe Edition</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="title-overlay">
+        <h1>Vibe Snake 3310 - Mistral Vibe Edition</h1>
+    </div>
+    
+    <div class="game-container">
+        <div class="score-display">Score: <span id="score">0</span> | High: <span id="highscore">0</span></div>
+        <canvas id="game" width="222" height="222"></canvas>
+        <div class="game-over" id="gameover">
+            GAME OVER<br>
+            <button id="restart">PLAY AGAIN</button>
+        </div>
+    </div>
+
+    <div class="controls-overlay">Use Arrow Keys or WASD to move</div>
+    <div class="meta-overlay">Nokia 3310 Style | Canvas + Vanilla JS</div>
+
+    <script src="game.js"></script>
+</body>
+</html>
