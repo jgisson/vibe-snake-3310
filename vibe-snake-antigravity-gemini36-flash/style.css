@@ -1,0 +1,355 @@
+:root {
+  /* Theme palette */
+  --bg-dark: #0f141d;
+  --bg-card: #182030;
+  --accent-cyan: #00f2fe;
+  --accent-gold: #ffb703;
+  
+  /* Nokia LCD Color Presets */
+  --lcd-bg: #9bbc0f;
+  --lcd-grid: #8baf08;
+  --lcd-dark: #0f380f;
+  --lcd-light: #8bac0f;
+  --lcd-glow: rgba(155, 188, 15, 0.35);
+}
+
+/* Color Themes for LCD screen */
+body.theme-amber {
+  --lcd-bg: #e09f3e;
+  --lcd-grid: #cd8e2e;
+  --lcd-dark: #3a1e05;
+  --lcd-light: #d69433;
+  --lcd-glow: rgba(224, 159, 62, 0.35);
+}
+body.theme-matrix {
+  --lcd-bg: #204020;
+  --lcd-grid: #183318;
+  --lcd-dark: #76ff03;
+  --lcd-light: #336633;
+  --lcd-glow: rgba(118, 255, 3, 0.25);
+}
+body.theme-cyber {
+  --lcd-bg: #102a3a;
+  --lcd-grid: #0c212e;
+  --lcd-dark: #00f2fe;
+  --lcd-light: #1b435d;
+  --lcd-glow: rgba(0, 242, 254, 0.3);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+body {
+  background-color: var(--bg-dark);
+  background-image: 
+    radial-gradient(circle at 50% 20%, #1e293b 0%, #0f141d 80%),
+    radial-gradient(circle at 10% 90%, rgba(0, 242, 254, 0.05) 0%, transparent 40%);
+  font-family: 'Outfit', sans-serif;
+  color: #f8fafc;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px 15px;
+  overflow-x: hidden;
+}
+
+/* Top Page Header */
+header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+h1.app-title {
+  font-size: clamp(1.4rem, 4vw, 2.2rem);
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, var(--accent-cyan) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 4px 20px rgba(0, 242, 254, 0.2);
+  margin-bottom: 6px;
+}
+
+.badge-sub {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 4px 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+}
+
+.badge-sub .dot {
+  width: 8px;
+  height: 8px;
+  background-color: #22c55e;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #22c55e;
+}
+
+/* Main Container Layout */
+.game-wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 35px;
+  max-width: 1050px;
+  width: 100%;
+}
+
+/* Nokia Phone Real Photo Container */
+.nokia-phone-container {
+  position: relative;
+  width: 360px;
+  max-width: 100%;
+  filter: drop-shadow(0 25px 35px rgba(0, 0, 0, 0.7));
+  margin: 0 auto;
+}
+
+.nokia-photo {
+  width: 100%;
+  height: auto;
+  display: block;
+  pointer-events: none;
+}
+
+/* LCD Screen Overlay positioned exactly inside green LCD bounds of photo */
+.lcd-screen-overlay {
+  position: absolute;
+  left: 16.35%;
+  top: 26.29%;
+  width: 67.49%;
+  height: 21.29%;
+  background-color: var(--lcd-bg);
+  border-radius: 10px;
+  padding: 6px 8px;
+  box-shadow: 
+    inset 0 0 10px rgba(0, 0, 0, 0.35),
+    0 0 15px var(--lcd-glow);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  z-index: 2;
+}
+
+/* LCD Scanlines effect */
+.lcd-screen-overlay::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.08) 50%
+  );
+  background-size: 100% 4px;
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* LCD Status Line */
+.lcd-status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  color: var(--lcd-dark);
+  padding-bottom: 2px;
+  border-bottom: 1.5px solid var(--lcd-dark);
+  margin-bottom: 3px;
+  z-index: 6;
+}
+
+/* Canvas Element */
+canvas#gameCanvas {
+  display: block;
+  background-color: transparent;
+  image-rendering: pixelated;
+  width: 100%;
+  height: calc(100% - 16px);
+  object-fit: contain;
+  z-index: 4;
+}
+
+/* Interactive Hotspot Buttons mapped over photo key positions */
+.key-hotspot {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.01);
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0);
+  cursor: pointer;
+  z-index: 10;
+  touch-action: manipulation;
+  transition: background 0.1s, border-color 0.1s, transform 0.08s;
+}
+
+.key-hotspot:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.key-hotspot:active, .key-hotspot.active {
+  background: rgba(0, 242, 254, 0.35);
+  border-color: var(--accent-cyan);
+  transform: scale(0.92);
+  box-shadow: 0 0 12px var(--accent-cyan);
+}
+
+/* Specific Hotspot Positions on 526x1198 image */
+.hotspot-navi { left: 31%; top: 51.5%; width: 38%; height: 5.5%; border-radius: 20px; }
+.hotspot-left-soft { left: 16%; top: 53.5%; width: 22%; height: 6.5%; border-radius: 20px; }
+.hotspot-right-soft { left: 62%; top: 53.5%; width: 22%; height: 6.5%; border-radius: 20px; }
+
+/* Numeric Keypad Hotspots */
+.hotspot-k1 { left: 15%; top: 63.5%; width: 22%; height: 5.5%; }
+.hotspot-k2 { left: 39%; top: 64.5%; width: 22%; height: 5.5%; }
+.hotspot-k3 { left: 63%; top: 63.5%; width: 22%; height: 5.5%; }
+
+.hotspot-k4 { left: 15%; top: 71.5%; width: 22%; height: 5.5%; }
+.hotspot-k5 { left: 39%; top: 72.5%; width: 22%; height: 5.5%; }
+.hotspot-k6 { left: 63%; top: 71.5%; width: 22%; height: 5.5%; }
+
+.hotspot-k7 { left: 15%; top: 79.5%; width: 22%; height: 5.5%; }
+.hotspot-k8 { left: 39%; top: 80.5%; width: 22%; height: 5.5%; }
+.hotspot-k9 { left: 63%; top: 79.5%; width: 22%; height: 5.5%; }
+
+.hotspot-kstar { left: 16%; top: 87.5%; width: 22%; height: 5.5%; }
+.hotspot-k0 { left: 39%; top: 88.5%; width: 22%; height: 5.5%; }
+.hotspot-khash { left: 62%; top: 87.5%; width: 22%; height: 5.5%; }
+
+/* Side Dashboard Panel */
+.side-panel {
+  flex: 1;
+  min-width: 280px;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card {
+  background-color: var(--bg-card);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #e2e8f0;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-title svg {
+  fill: var(--accent-cyan);
+}
+
+/* Settings & Selectors */
+.setting-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.setting-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #94a3b8;
+}
+
+.btn-toggle-group {
+  display: flex;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  padding: 2px;
+  gap: 2px;
+}
+
+.btn-toggle {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  padding: 5px 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-toggle.active {
+  background: var(--accent-cyan);
+  color: #0f172a;
+}
+
+/* High Score Box */
+.score-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0,0,0,0.3);
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.score-val {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1.2rem;
+  color: var(--accent-gold);
+}
+
+/* Instruction Keys List */
+.controls-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: #94a3b8;
+}
+
+.key-badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.1);
+  color: #e2e8f0;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-weight: bold;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+footer {
+  margin-top: 30px;
+  text-align: center;
+  font-size: 0.82rem;
+  color: #64748b;
+}
+
+/* Responsive scaling */
+@media (max-width: 500px) {
+  .nokia-phone-container {
+    width: 310px;
+  }
+}
