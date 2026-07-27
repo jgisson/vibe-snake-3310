@@ -1,0 +1,174 @@
+:root {
+  --lcd: #97b163;
+  --lcd-glow: #a9c273;
+  --ink: #1b2410;
+  --ink-dim: rgba(27, 36, 16, .2);
+
+  /* Screen glass, measured from Nokia_3310.png (526x1198). */
+  --screen-left: 19.58%;
+  --screen-top: 27.05%;
+  --screen-width: 64.07%;
+  --screen-height: 20.53%;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  background: radial-gradient(circle at 50% 0%, #2f3a45, #14181d 70%);
+  color: #dfe6ec;
+  font-family: "Lucida Console", "DejaVu Sans Mono", Menlo, monospace;
+  -webkit-font-smoothing: none;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 16px 28px;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(14px, 3.4vw, 22px);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-align: center;
+  color: #cfe08a;
+  text-shadow: 0 0 12px rgba(158, 189, 78, .45);
+}
+
+.subtitle {
+  margin: -8px 0 0;
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: #7c8b99;
+  text-transform: uppercase;
+}
+
+/* ---------- the phone photo ---------- */
+.phone {
+  position: relative;
+  /* Keep the whole handset on screen: cap by width, and by the height left over. */
+  width: min(92vw, 420px, calc((100vh - 190px) * 526 / 1198));
+  aspect-ratio: 526 / 1198;
+  flex: none;
+}
+
+.photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+  filter: drop-shadow(0 26px 34px rgba(0, 0, 0, .65));
+}
+
+/* ---------- live screen, laid over the photo's glass ---------- */
+.lcd {
+  position: absolute;
+  left: var(--screen-left);
+  top: var(--screen-top);
+  width: var(--screen-width);
+  height: var(--screen-height);
+  container-type: size;      /* lets the screen contents scale in cq units */
+  display: flex;
+  flex-direction: column;
+  padding: 2.5% 2.5% 2%;
+  border-radius: 4px;
+  background: radial-gradient(120% 120% at 50% 0%, var(--lcd-glow), var(--lcd) 70%);
+  color: var(--ink);
+  overflow: hidden;
+  box-shadow:
+    inset 0 0 6px rgba(27, 36, 16, .35),
+    inset 0 1px 3px rgba(0, 0, 0, .35);
+}
+
+.lcd::after { /* faint scanlines so the pixels sit in the glass, not on it */
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(0deg, rgba(0, 0, 0, .06) 0 1px, transparent 1px 3px);
+}
+
+.status {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 8.5cqh;
+  letter-spacing: .5px;
+  line-height: 1;
+  padding-bottom: 3cqh;
+  margin-bottom: 2cqh;
+  border-bottom: 1px dotted var(--ink-dim);
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: auto 0;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3cqh;
+  text-align: center;
+  padding: 4%;
+  background: var(--lcd);
+  font-size: 9cqh;
+  line-height: 1.35;
+  letter-spacing: .5px;
+}
+
+.overlay[hidden] { display: none; }
+.overlay .big { font-size: 13cqh; font-weight: bold; letter-spacing: 1px; }
+.overlay .blink { animation: blink 1s steps(1, end) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+
+/* ---------- invisible hit areas over the real keys ---------- */
+.key {
+  position: absolute;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: background .08s ease;
+}
+
+.key:active { background: rgba(255, 255, 255, .3); }
+.key:focus-visible { outline: 2px solid #cfe08a; outline-offset: 2px; }
+.key.soft { border-radius: 40% / 50%; }
+
+/* Positions measured from the photo's own buttons. */
+.k2 { left: 40.87%; top: 67.11%; width: 18.63%; height: 4.17%; }
+.k4 { left: 14.45%; top: 72.20%; width: 17.30%; height: 4.59%; }
+.k6 { left: 68.63%; top: 72.20%; width: 17.30%; height: 4.59%; }
+.k8 { left: 40.87%; top: 81.22%; width: 18.63%; height: 4.09%; }
+.k5 { left: 40.87%; top: 74.12%; width: 18.63%; height: 4.17%; }
+.kc { left: 17.11%; top: 54.42%; width: 17.30%; height: 5.85%; }
+.kr { left: 56.50%; top: 57.00%; width: 20.00%; height: 5.50%; }
+
+.hints {
+  margin: 2px 0 0;
+  font-size: 10px;
+  line-height: 1.8;
+  letter-spacing: 1px;
+  color: #7c8b99;
+  text-align: center;
+  max-width: 420px;
+}
+
+.hints b { color: #a8b8c4; font-weight: normal; }
