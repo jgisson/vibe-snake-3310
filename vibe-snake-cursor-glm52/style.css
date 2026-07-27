@@ -1,0 +1,127 @@
+:root {
+  --nokia-screen: #9bbc0f;
+  --nokia-screen-mid: #8aaf0d;
+  --nokia-screen-dark: #1b1f0a;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1f1f1f 0%, #2a2a2a 100%);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 24px 12px 40px;
+}
+
+h1 {
+  font-size: clamp(18px, 4vw, 26px);
+  letter-spacing: 1px;
+  margin: 0 0 18px;
+  text-align: center;
+  font-weight: 600;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* Real Nokia 3310 photo as the phone body */
+.phone-frame {
+  position: relative;
+  width: min(526px, 92vw);
+  aspect-ratio: 526 / 1198;
+  background-image: url("Nokia_3310.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 14px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6);
+  /* Tunable: position of the LCD active area over the photo (percentages of frame) */
+}
+
+/* The LCD active area — green fill covers the photo's original screen content */
+.screen-area {
+  position: absolute;
+  left: 16%;
+  top: 26%;
+  width: 68%;
+  height: 21%;
+  background: var(--nokia-screen);
+  border-radius: 6% / 12%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.35);
+}
+
+.hud {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: "Courier New", monospace;
+  font-size: clamp(7px, 1.6vw, 11px);
+  font-weight: 700;
+  color: var(--nokia-screen-dark);
+  padding: 3% 5% 1%;
+  letter-spacing: 0.5px;
+}
+
+.canvas-wrap {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-family: "Courier New", monospace;
+  font-weight: 700;
+  color: var(--nokia-screen-dark);
+  text-align: center;
+  pointer-events: none;
+  background: rgba(155, 188, 15, 0.9);
+  font-size: clamp(8px, 1.8vw, 12px);
+  line-height: 1.4;
+}
+
+.overlay.hidden { display: none; }
+
+.overlay .big {
+  font-size: clamp(10px, 2.4vw, 16px);
+  margin-bottom: 2px;
+}
+
+.overlay .small { font-size: clamp(7px, 1.4vw, 10px); opacity: 0.85; }
+
+.footer {
+  margin-top: 14px;
+  font-size: 11px;
+  color: #888;
+  text-align: center;
+  font-family: "Courier New", monospace;
+}
+
+.footer span { color: #9bbc0f; }
