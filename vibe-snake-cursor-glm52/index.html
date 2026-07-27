@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Vibe Snake 3310 - GLM 5.2 Edition</title>
+<style>
+  :root {
+    --nokia-bg: #9bbb6f;
+    --nokia-screen: #c7e09b;
+    --nokia-screen-dark: #4a5d2a;
+    --nokia-body: #2a2a2a;
+    --nokia-body-light: #3a3a3a;
+    --nokia-accent: #1a1a1a;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1f1f1f 0%, #2a2a2a 100%);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 24px 12px 40px;
+  }
+
+  h1 {
+    font-size: clamp(18px, 4vw, 26px);
+    letter-spacing: 1px;
+    margin: 0 0 18px;
+    text-align: center;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  }
+
+  .phone {
+    background: var(--nokia-body);
+    border-radius: 28px 28px 36px 36px;
+    padding: 22px 18px 18px;
+    width: min(320px, 92vw);
+    box-shadow:
+      0 18px 40px rgba(0, 0, 0, 0.55),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    border: 1px solid #000;
+  }
+
+  .speaker {
+    width: 44px;
+    height: 5px;
+    background: #111;
+    border-radius: 3px;
+    margin: 0 auto 14px;
+  }
+
+  .screen-bezel {
+    background: #5a6a3a;
+    border: 3px solid #111;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.5);
+  }
+
+  .screen {
+    background: var(--nokia-screen);
+    border-radius: 4px;
+    padding: 6px;
+    position: relative;
+  }
+
+  .hud {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: "Courier New", monospace;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--nokia-screen-dark);
+    padding: 2px 4px 4px;
+    letter-spacing: 0.5px;
+  }
+
+  canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    background: var(--nokia-screen);
+  }
+
+  .overlay {
+    position: absolute;
+    inset: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: "Courier New", monospace;
+    font-weight: 700;
+    color: var(--nokia-screen-dark);
+    text-align: center;
+    pointer-events: none;
+    background: rgba(199, 224, 155, 0.85);
+    border-radius: 4px;
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  .overlay.hidden { display: none; }
+
+  .overlay .big {
+    font-size: 16px;
+    margin-bottom: 4px;
+  }
+
+  .overlay .small { font-size: 10px; opacity: 0.85; }
+
+  .keypad {
+    margin-top: 16px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .key {
+    background: var(--nokia-body-light);
+    color: #eee;
+    border: none;
+    border-radius: 18px;
+    padding: 12px 0;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+    box-shadow:
+      0 2px 0 #000,
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transition: transform 0.05s, background 0.1s;
+  }
+
+  .key:hover { background: #4a4a4a; }
+  .key:active { transform: translateY(2px); box-shadow: 0 0 0 #000; }
+
+  .key .sub {
+    display: block;
+    font-size: 9px;
+    font-weight: 400;
+    opacity: 0.7;
+    margin-top: 2px;
+  }
+
+  .footer {
+    margin-top: 14px;
+    font-size: 11px;
+    color: #888;
+    text-align: center;
+    font-family: "Courier New", monospace;
+  }
+
+  .footer span { color: #c7e09b; }
+</style>
+</head>
+<body>
+  <h1>Vibe Snake 3310 — GLM 5.2 Edition</h1>
+
+  <div class="phone">
+    <div class="speaker"></div>
+    <div class="screen-bezel">
+      <div class="screen">
+        <div class="hud">
+          <span id="score">SCORE 0</span>
+          <span id="high">HI 0</span>
+        </div>
+        <canvas id="game" width="168" height="144"></canvas>
+        <div class="overlay" id="overlay">
+          <div class="big">VIBE SNAKE</div>
+          <div>Press 5 / Center<br>to start</div>
+          <div class="small">Arrows or 2 4 6 8</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="keypad">
+      <button class="key" data-dir="up">2<span class="sub">▲</span></button>
+      <button class="key" data-action="start">5<span class="sub">OK</span></button>
+      <button class="key" data-dir="down">8<span class="sub">▼</span></button>
+      <button class="key" data-dir="left">4<span class="sub">◄</span></button>
+      <button class="key" data-action="pause">0<span class="sub">P</span></button>
+      <button class="key" data-dir="right">6<span class="sub">►</span></button>
+    </div>
+  </div>
+
+  <div class="footer">
+    High score saved in <span>localStorage</span> · Vanilla JS · No frameworks
+  </div>
+
+<script>
+(function () {
+  "use strict";
+
+  const canvas = document.getElementById("game");
+  const ctx = canvas.getContext("2d");
+  const scoreEl = document.getElementById("score");
+  const highEl = document.getElementById("high");
+  const overlay = document.getElementById("overlay");
+
+  const CELL = 8;
+  const COLS = canvas.width / CELL;   // 21
+  const ROWS = canvas.height / CELL;  // 18
+  const TICK_MS = 120;
+
+  const HIGH_KEY = "vibe-snake-3310-glm52-high";
+
+  let snake, dir, nextDir, food, score, high, running, paused, loopId;
+
+  function loadHigh() {
+    const v = parseInt(localStorage.getItem(HIGH_KEY), 10);
+    return isNaN(v) ? 0 : v;
+  }
+
+  function saveHigh(v) {
+    localStorage.setItem(HIGH_KEY, String(v));
+  }
+
+  function reset() {
+    snake = [
+      { x: 8, y: 9 },
+      { x: 7, y: 9 },
+      { x: 6, y: 9 }
+    ];
+    dir = { x: 1, y: 0 };
+    nextDir = { x: 1, y: 0 };
+    score = 0;
+    placeFood();
+    updateHud();
+  }
+
+  function placeFood() {
+    while (true) {
+      const f = {
+        x: Math.floor(Math.random() * COLS),
+        y: Math.floor(Math.random() * ROWS)
+      };
+      if (!snake.some(s => s.x === f.x && s.y === f.y)) {
+        food = f;
+        return;
+      }
+    }
+  }
+
+  function updateHud() {
+    scoreEl.textContent = "SCORE " + score;
+    highEl.textContent = "HI " + high;
+  }
+
+  function showOverlay(big, line, small) {
+    overlay.classList.remove("hidden");
+    overlay.innerHTML =
+      '<div class="big">' + big + "</div>" +
+      '<div>' + line + "</div>" +
+      (small ? '<div class="small">' + small + "</div>" : "");
+  }
+
+  function hideOverlay() {
+    overlay.classList.add("hidden");
+  }
+
+  function step() {
+    dir = nextDir;
+    const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
+
+    if (head.x < 0 || head.x >= COLS || head.y < 0 || head.y >= ROWS) {
+      return gameOver();
+    }
+    if (snake.some(s => s.x === head.x && s.y === head.y)) {
+      return gameOver();
+    }
+
+    snake.unshift(head);
+
+    if (head.x === food.x && head.y === food.y) {
+      score++;
+      if (score > high) {
+        high = score;
+        saveHigh(high);
+      }
+      updateHud();
+      placeFood();
+    } else {
+      snake.pop();
+    }
+
+    draw();
+  }
+
+  function draw() {
+    ctx.fillStyle = getComputedStyle(document.documentElement)
+      .getPropertyValue("--nokia-screen").trim() || "#c7e09b";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    const dark = getComputedStyle(document.documentElement)
+      .getPropertyValue("--nokia-screen-dark").trim() || "#4a5d2a";
+
+    // food (blink-ish solid block)
+    ctx.fillStyle = dark;
+    ctx.fillRect(food.x * CELL, food.y * CELL, CELL, CELL);
+
+    // snake
+    ctx.fillStyle = dark;
+    for (let i = 0; i < snake.length; i++) {
+      const s = snake[i];
+      ctx.fillRect(s.x * CELL, s.y * CELL, CELL, CELL);
+    }
+
+    // head highlight (tiny pixel) to distinguish
+    ctx.fillStyle = "rgba(199, 224, 155, 0.9)";
+    ctx.fillRect(snake[0].x * CELL + 2, snake[0].y * CELL + 2, 2, 2);
+  }
+
+  function gameOver() {
+    running = false;
+    clearInterval(loopId);
+    loopId = null;
+    if (score >= high) {
+      showOverlay("GAME OVER", "New high: " + score, "Press 5 to retry");
+    } else {
+      showOverlay("GAME OVER", "Score " + score + " · HI " + high, "Press 5 to retry");
+    }
+  }
+
+  function start() {
+    if (running) return;
+    reset();
+    hideOverlay();
+    running = true;
+    paused = false;
+    draw();
+    loopId = setInterval(step, TICK_MS);
+  }
+
+  function togglePause() {
+    if (!running) return;
+    paused = !paused;
+    if (paused) {
+      clearInterval(loopId);
+      loopId = null;
+      showOverlay("PAUSED", "Press 0 to resume", "");
+    } else {
+      hideOverlay();
+      loopId = setInterval(step, TICK_MS);
+    }
+  }
+
+  function setDir(x, y) {
+    // disallow reversing
+    if (dir.x === -x && dir.y === -y) return;
+    if (dir.x === x && dir.y === y) return;
+    nextDir = { x, y };
+  }
+
+  // Input — keyboard
+  document.addEventListener("keydown", function (e) {
+    switch (e.key) {
+      case "ArrowUp": case "2": setDir(0, -1); e.preventDefault(); break;
+      case "ArrowDown": case "8": setDir(0, 1); e.preventDefault(); break;
+      case "ArrowLeft": case "4": setDir(-1, 0); e.preventDefault(); break;
+      case "ArrowRight": case "6": setDir(1, 0); e.preventDefault(); break;
+      case "5": case "Enter": case " ": start(); e.preventDefault(); break;
+      case "0": case "p": case "P": togglePause(); e.preventDefault(); break;
+    }
+  });
+
+  // Input — on-screen keypad
+  document.querySelectorAll(".key").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      const d = btn.dataset.dir;
+      const a = btn.dataset.action;
+      if (d === "up") setDir(0, -1);
+      else if (d === "down") setDir(0, 1);
+      else if (d === "left") setDir(-1, 0);
+      else if (d === "right") setDir(1, 0);
+      else if (a === "start") start();
+      else if (a === "pause") togglePause();
+    });
+  });
+
+  // Touch swipe on canvas
+  let touchStart = null;
+  canvas.addEventListener("touchstart", function (e) {
+    if (e.touches.length === 1) {
+      touchStart = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }
+  }, { passive: true });
+
+  canvas.addEventListener("touchend", function (e) {
+    if (!touchStart) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - touchStart.x;
+    const dy = t.clientY - touchStart.y;
+    if (Math.abs(dx) < 16 && Math.abs(dy) < 16) {
+      start(); // tap = start
+    } else if (Math.abs(dx) > Math.abs(dy)) {
+      setDir(dx > 0 ? 1 : -1, 0);
+    } else {
+      setDir(0, dy > 0 ? 1 : -1);
+    }
+    touchStart = null;
+  }, { passive: true });
+
+  // Init
+  high = loadHigh();
+  reset();
+  draw();
+  updateHud();
+})();
+</script>
+</body>
+</html>
